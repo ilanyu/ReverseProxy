@@ -15,6 +15,7 @@ func StartServer(bind string, remote string)  {
 	h := &handle{reverseProxy: remote}
 	srv.Addr = bind
 	srv.Handler = h
+
 	go func() {
 		if err := srv.ListenAndServe(); err != nil {
 			log.Fatalln("ListenAndServe: ", err)
@@ -33,7 +34,7 @@ func main() {
 	StartServer(cmd.bind, cmd.remote)
 	reader := bufio.NewReader(os.Stdin)
 	for {
-		str , err := reader.ReadString('\n')
+		str, err := reader.ReadString('\n')
 		if err != nil {
 			log.Println(err)
 		}
