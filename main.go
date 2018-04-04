@@ -1,11 +1,8 @@
 package main
 
 import (
-	"log"
 	"net/http"
-	"bufio"
-	"os"
-	"strings"
+	"log"
 )
 
 var srv http.Server
@@ -15,16 +12,15 @@ func StartServer(bind string, remote string)  {
 	h := &handle{reverseProxy: remote}
 	srv.Addr = bind
 	srv.Handler = h
-
-	go func() {
+	//go func() {
 		if err := srv.ListenAndServe(); err != nil {
 			log.Fatalln("ListenAndServe: ", err)
 		}
-	}()
+	//}()
 }
 
 func StopServer()  {
-	if err := srv.Close() ; err != nil {
+	if err := srv.Shutdown(nil) ; err != nil {
 		log.Println(err)
 	}
 }
@@ -32,16 +28,4 @@ func StopServer()  {
 func main() {
 	cmd := parseCmd()
 	StartServer(cmd.bind, cmd.remote)
-	reader := bufio.NewReader(os.Stdin)
-	for {
-		str, err := reader.ReadString('\n')
-		if err != nil {
-			log.Println(err)
-		}
-		if strings.TrimSpace(str) == "stop" {
-			log.Println("will stop server")
-			StopServer()
-			return
-		}
-	}
 }

@@ -6,9 +6,9 @@ import (
 	"net/http/httputil"
 	"log"
 	"net"
-	"context"
 	"time"
 	"io/ioutil"
+	"context"
 )
 
 type handle struct {
@@ -21,7 +21,6 @@ func (this *handle) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatalln(err)
 	}
-
 	dialer := &net.Dialer{
 		Timeout:   30 * time.Second,
 		KeepAlive: 30 * time.Second,
