@@ -9,6 +9,8 @@ import (
 	"time"
 	"io/ioutil"
 	"context"
+	"strings"
+	"regexp"
 )
 
 type handle struct {
@@ -16,6 +18,13 @@ type handle struct {
 }
 
 func (this *handle) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	relateUrl := r.URL.String()
+	index := strings.Index(relateUrl, "/rpc")
+	if index != 0 {
+		relateUrl = regexp.MustCompile("userName=[^&]+").ReplaceAllString(relateUrl[index:], "userName=" + relateUrl[1:index])
+		relatedUrl, _ := url.Parse(relateUrl)
+		r.URL = r.URL.ResolveReference(relatedUrl)
+	}
 	log.Println(r.RemoteAddr + " " + r.Method + " " + r.URL.String() + " " + r.Proto + " " + r.UserAgent())
 	remote, err := url.Parse(this.reverseProxy)
 	if err != nil {
@@ -37,7 +46,7 @@ func (this *handle) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			if err != nil {
 				log.Println(err)
 			}
-			addr = string(res) + ":80"
+			addr = strings.Split(string(res), ";")[0] + ":80"
 		}
 
 		return dialer.DialContext(ctx, network, addr)
