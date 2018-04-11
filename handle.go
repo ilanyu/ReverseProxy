@@ -9,6 +9,7 @@ import (
 	"time"
 	"io/ioutil"
 	"context"
+	"strings"
 )
 
 type handle struct {
@@ -37,7 +38,7 @@ func (this *handle) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			if err != nil {
 				log.Println(err)
 			}
-			addr = string(res) + ":80"
+			addr = strings.Split(string(res), ";")[0] + ":80"
 		}
 
 		return dialer.DialContext(ctx, network, addr)
