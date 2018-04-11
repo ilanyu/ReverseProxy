@@ -16,3 +16,8 @@ ReverseProxy in golang
 
 	Listening on 0.0.0.0:8081, forwarding to https://www.baidu.com
 
+## Custom:
+
+	Default username: http://127.0.0.1:8888/
+
+	Custom username: http://127.0.0.1:8888/xxx
