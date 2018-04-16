@@ -5,6 +5,7 @@ import (
 	"log"
 )
 
+var cmd Cmd
 var srv http.Server
 
 func StartServer(bind string, remote string)  {
@@ -26,6 +27,6 @@ func StopServer()  {
 }
 
 func main() {
-	cmd := parseCmd()
+	cmd = parseCmd()
 	StartServer(cmd.bind, cmd.remote)
 }
